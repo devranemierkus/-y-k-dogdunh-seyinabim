@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hüseyin Abim - Doğum Günü Kutlaması</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(to right top, #6dd5ed, #2193b0, #004e92);
+      color: white;
+      overflow: hidden;
+    }
+
+    #permissionScreen, #mainScreen {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    #permissionScreen button {
+      padding: 20px 40px;
+      font-size: 1.5em;
+      background-color: #ffee93;
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .cake {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin-top: 30px;
+    }
+
+    .cake-layer {
+      width: 100%;
+      height: 60px;
+      border-radius: 15px;
+      margin-bottom: -20px;
+      border: 3px solid white;
+    }
+
+    .layer1 { background-color: #3b6978; }
+    .layer2 { background-color: #84a9ac; }
+    .layer3 { background-color: #cae8d5; }
+
+    .candle {
+      width: 10px;
+      height: 50px;
+      background: #ff7043;
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 3px;
+    }
+
+    .flame {
+      width: 15px;
+      height: 25px;
+      background: radial-gradient(circle, #fff176 40%, #ffa000 60%);
+      border-radius: 50%;
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: flicker 0.2s infinite alternate;
+    }
+
+    .flame.off {
+      opacity: 0;
+      transition: opacity 0.3s ease-out;
+    }
+
+    @keyframes flicker {
+      from { transform: translateX(-50%) scale(1); opacity: 1; }
+      to { transform: translateX(-50%) scale(1.1); opacity: 0.8; }
+    }
+
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.5em;
+      margin: 10px 0;
+      color: #ffee93;
+    }
+
+    #finalMessage {
+      font-size: 2em;
+      margin-top: 20px;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    #finalMessage.visible {
+      opacity: 1;
+    }
+
+    button.blow {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      background-color: #ffe082;
+      color: #37474f;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Ses izni ekranı -->
+<div id="permissionScreen">
+  <h2>🎵 Kutlama Başlamadan Önce</h2>
+  <p>Lütfen sesi açmak için tıklayın</p>
+  <button onclick="grantAudioPermission()">Sesi Aç ve Başla</button>
+</div>
+
+<!-- Ana kutlama ekranı -->
+<div id="mainScreen" class="hidden">
+  <div style="text-align:center;">
+    <h1>Hüseyin Abim</h1>
+    <p>Doğum Günün Kutlu Olsun! Yeni yaşın sana sağlık, huzur ve başarı getirsin. 🎉💙</p>
+
+    <div class="cake">
+      <div class="cake-layer layer1"></div>
+      <div class="cake-layer layer2"></div>
+      <div class="cake-layer layer3">
+        <div class="candle">
+          <div class="flame" id="flame"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="blow" onclick="blowCandle()">Pastayı Üfle</button>
+    <div id="finalMessage">Pastayı Üfledik, İyi ki Doğdun Hüseyin Abim! 🎉👏</div>
+  </div>
+</div>
+
+<!-- Sesler -->
+<audio id="bgMusic" src="https://cdn.pixabay.com/audio/2023/04/28/audio_c06ad0864c.mp3" loop></audio>
+<audio id="blowSound" src="https://www.soundjay.com/misc/sounds/blow-flame-1.mp3"></audio>
+<audio id="clapSound" src="https://www.soundjay.com/human/sounds/clap-5.mp3"></audio>
+
+<script>
+  const permissionScreen = document.getElementById('permissionScreen');
+  const mainScreen = document.getElementById('mainScreen');
+  const bgMusic = document.getElementById('bgMusic');
+  const blowSound = document.getElementById('blowSound');
+  const clapSound = document.getElementById('clapSound');
+  const flame = document.getElementById('flame');
+  const finalMessage = document.getElementById('finalMessage');
+
+  function grantAudioPermission() {
+    bgMusic.play().catch(e => console.log("Müzik başlamadı:", e));
+    permissionScreen.classList.add('hidden');
+    mainScreen.classList.remove('hidden');
+  }
+
+  let hasBlown = false;
+
+  function blowCandle() {
+    if (hasBlown) return;
+    hasBlown = true;
+
+    bgMusic.pause();
+    blowSound.play();
+
+    flame.classList.add('off');
+
+    setTimeout(() => {
+      clapSound.play();
+      finalMessage.classList.add('visible');
+    }, 1000);
+
+    setTimeout(() => {
+      bgMusic.play();
+    }, 4000);
+  }
+</script>
+
+</body>
+</html>

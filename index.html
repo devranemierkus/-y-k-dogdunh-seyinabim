@@ -3,64 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Doğum Günü Kutlaması</title>
+  <title>🎉 Doğum Günü Başlasın</title>
   <style>
     body {
       margin: 0;
-      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      background: linear-gradient(to right, #ff758c, #ff7eb3);
       height: 100vh;
-      font-family: sans-serif;
-      color: white;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
+      color: white;
+      font-family: Arial, sans-serif;
+      flex-direction: column;
       text-align: center;
     }
-
-    #startBtn {
-      background: #ffee93;
-      color: #000;
-      border: none;
+    button {
       padding: 20px 40px;
       font-size: 1.5rem;
+      border: none;
       border-radius: 12px;
+      background: #ffee93;
+      color: #000;
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
     }
-
-    #startBtn:hover {
+    button:hover {
       background: #fff9c4;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 30px;
     }
   </style>
 </head>
 <body>
 
-<h1>🎉 Doğum Gününe Hazır mısın?</h1>
-<button id="startBtn">🎵 Başlat</button>
+<h1>🎉 Doğum Günü Başlasın!</h1>
+<p>Sesi duymak için aşağıdaki butona bas 🥳</p>
+<button id="startBtn">🎵 Sesi Başlat</button>
 
-<!-- Ses -->
-<audio id="bgMusic" src="https://cdn.pixabay.com/audio/2023/04/28/audio_c06ad0864c.mp3" preload="auto" loop></audio>
+<audio id="music" src="https://cdn.pixabay.com/audio/2023/04/28/audio_c06ad0864c.mp3" loop preload="auto"></audio>
 
 <script>
-  const startBtn = document.getElementById('startBtn');
-  const bgMusic = document.getElementById('bgMusic');
+  const btn = document.getElementById('startBtn');
+  const music = document.getElementById('music');
 
-  startBtn.addEventListener('click', () => {
-    bgMusic.play()
+  btn.addEventListener('click', () => {
+    music.play()
       .then(() => {
-        alert("🎶 Müzik başladı! Artık kutlama ekranına geçebilirsin.");
-        startBtn.style.display = "none";
+        btn.remove(); // Butonu kaldır
+        document.querySelector('p').innerText = '🎶 Müzik başladı! İyi ki doğdun!';
       })
       .catch((err) => {
         alert("Tarayıcı sesi engelledi. Lütfen tekrar tıkla.");
-        console.error("Ses başlatılamadı:", err);
+        console.error(err);
       });
   });
 </script>
